@@ -1,0 +1,14 @@
+@openzeppelin/contracts-upgradeable-v4/=lib/agora-governor/lib/openzeppelin-contracts-upgradeable-v4/contracts/
+@openzeppelin/contracts-v4/=lib/agora-governor/lib/openzeppelin-contracts-v4/contracts/
+@openzeppelin/contracts-v5/=lib/agora-governor/lib/openzeppelin-contracts-v5/contracts/
+@openzeppelin/contracts/=lib/agora-governor/lib/openzeppelin-contracts-v5/contracts/
+@solady/=lib/agora-governor/lib/solady/src/
+agora-governor/=lib/agora-governor/src/
+ds-test/=lib/agora-governor/lib/openzeppelin-contracts-v5/lib/forge-std/lib/ds-test/src/
+erc4626-tests/=lib/agora-governor/lib/openzeppelin-contracts-v5/lib/erc4626-tests/
+forge-std/=lib/forge-std/src/
+openzeppelin-contracts-upgradeable-v4/=lib/agora-governor/lib/openzeppelin-contracts-upgradeable-v4/
+openzeppelin-contracts-v4/=lib/agora-governor/lib/openzeppelin-contracts-v4/
+openzeppelin-contracts-v5/=lib/agora-governor/lib/openzeppelin-contracts-v5/
+openzeppelin/=lib/agora-governor/src/
+solady/=lib/agora-governor/lib/solady/src/
