@@ -67,6 +67,7 @@ abstract contract DeployBase is Script {
                 abi.encodeWithSelector(
                     AgoraGovernor.initialize.selector,
                     membership,
+                    AgoraGovernor.SupplyType.Total,
                     governorAdmin,
                     governorManager,
                     timelockAddress,
@@ -84,8 +85,8 @@ abstract contract DeployBase is Script {
         assert(address(timelock) == timelockAddress);
 
         // Govenor modules
-        ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
-        AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
+        // ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
+        // AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
 
         vm.stopBroadcast();
     }
