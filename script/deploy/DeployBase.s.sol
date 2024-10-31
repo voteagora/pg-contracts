@@ -3,25 +3,32 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
 
+import {ERC1967Proxy} from "@openzeppelin/contracts-v5/proxy/ERC1967/ERC1967Proxy.sol";
 import {TransparentUpgradeableProxy} from "@openzeppelin/contracts-v4/proxy/transparent/TransparentUpgradeableProxy.sol";
 import {IERC20} from "@openzeppelin/contracts-v4/token/ERC20/IERC20.sol";
 import {IVotesUpgradeable} from "@openzeppelin/contracts-upgradeable-v4/governance/utils/IVotesUpgradeable.sol";
+import {ProxyAdmin} from "@openzeppelin/contracts-v4/proxy/transparent/ProxyAdmin.sol";
+import {TimelockController} from "@openzeppelin/contracts-v4/governance/TimelockController.sol";
 
 import {ProposalTypesConfigurator} from "agora-governor/ProposalTypesConfigurator.sol";
 import {AgoraGovernor} from "agora-governor/AgoraGovernor.sol";
 import {IProposalTypesConfigurator} from "agora-governor/interfaces/IProposalTypesConfigurator.sol";
+import {ApprovalVotingModule} from "agora-governor/modules/ApprovalVotingModule.sol";
 
-import {Timelock} from "src/Timelock.sol";
-import {ProxyAdmin} from "src/ProxyAdmin.sol";
+import {Membership} from "src/Membership.sol";
 
 abstract contract DeployBase is Script {
     ProxyAdmin proxyAdmin;
     ProposalTypesConfigurator proposalTypesConfigurator;
-    Timelock timelock;
-    IERC20 token;
+    TimelockController timelock;
+    Membership membership;
 
-    constructor(address _token) {
-        token = IERC20(_token);
+    address governorAdmin;
+    address governorManager;
+
+    constructor(address _governorAdmin, address _governorManager) {
+        governorAdmin = _governorAdmin;
+        governorManager = _governorManager;
     }
 
     function setup() internal {
@@ -33,50 +40,52 @@ abstract contract DeployBase is Script {
 
         // Proposal types for governor.
         IProposalTypesConfigurator.ProposalType[] memory proposalTypes =
-            new IProposalTypesConfigurator.ProposalType[](4);
+            new IProposalTypesConfigurator.ProposalType[](0);
 
-        // Deploy implementations.
-        {
-            address[] memory owners = new address[](1);
-            owners[0] = deployer;
-
-            // Non-proxy implementations
-            proxyAdmin = new ProxyAdmin(owners);
-        }
+        // Proposal Types Configurator
         proposalTypesConfigurator = new ProposalTypesConfigurator();
 
-        // Proxy implementations
-        AgoraGovernor governorImplementation = new AgoraGovernor();
-        Timelock timelockImplementation = new Timelock();
-
-        // Deploy proxies.
-        timelock = Timelock(
-            payable(
-                address(
-                    new TransparentUpgradeableProxy{salt: keccak256("TimelockCyber")}(
-                        address(timelockImplementation), address(proxyAdmin), ""
-                    )
+        // Deploy membership
+        membership = Membership(
+            address(
+                new ERC1967Proxy{salt: keccak256(abi.encodePacked("Membership"))}(
+                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementation"))}()),
+                    abi.encodeWithSignature("initialize(address,address,address)", deployer, deployer, deployer)
                 )
             )
         );
 
+        proxyAdmin = new ProxyAdmin();
+
+        // Governor
+        AgoraGovernor governorImplementation = new AgoraGovernor();
+        address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 1);
         address governor = address(
-            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorCyber")}(
+            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG")}(
                 address(governorImplementation),
                 address(proxyAdmin),
                 abi.encodeWithSelector(
                     AgoraGovernor.initialize.selector,
-                    token,
-                    deployer,
-                    deployer,
-                    timelock,
+                    membership,
+                    governorAdmin,
+                    governorManager,
+                    timelockAddress,
                     proposalTypesConfigurator,
                     proposalTypes
                 )
             )
         );
 
-        timelock.initialize(0, governor, deployer);
+        // Timelock
+        address[] memory governorProxy = new address[](1);
+        governorProxy[0] = governor;
+        timelock = new TimelockController(1 days, governorProxy, governorProxy, deployer);
+        // proxyAdmin.transferOwnership(address(timelock));
+        assert(address(timelock) == timelockAddress);
+
+        // Govenor modules
+        ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
+        AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
 
         vm.stopBroadcast();
     }
