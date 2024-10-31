@@ -49,7 +49,7 @@ abstract contract DeployBase is Script {
         membership = Membership(
             address(
                 new ERC1967Proxy{salt: keccak256(abi.encodePacked("Membership"))}(
-                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementation"))}()),
+                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementationP"))}()),
                     abi.encodeWithSignature("initialize(address,address,address)", deployer, deployer, deployer)
                 )
             )
@@ -67,6 +67,7 @@ abstract contract DeployBase is Script {
                 abi.encodeWithSelector(
                     AgoraGovernor.initialize.selector,
                     membership,
+                    AgoraGovernor.SupplyType.Total,
                     governorAdmin,
                     governorManager,
                     timelockAddress,
@@ -84,8 +85,8 @@ abstract contract DeployBase is Script {
         assert(address(timelock) == timelockAddress);
 
         // Govenor modules
-        ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
-        AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
+        // ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
+        // AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
 
         vm.stopBroadcast();
     }
