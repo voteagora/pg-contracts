@@ -1,4 +1,4 @@
-# Project Contracts & Scripts
+# Protocol Guild Contracts & Scripts
 
 [![Version][version-badge]][version-link]
 
@@ -11,7 +11,7 @@
 <th>Timelock</th>
 <th>ProposalTypesConfigurator</th>
 <th>ProxyAdmin</th>
-<th>Token</th>
+<th>Membership</th>
 </tr>
 <tr>
 <td>Mainnet (Production)</td>
