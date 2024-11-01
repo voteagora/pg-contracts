@@ -14,12 +14,12 @@
 <th>Membership</th>
 </tr>
 <tr>
-<td>Mainnet (Production)</td>
-<td><code>N/A</code></td>
-<td><code>N/A</code></td>
-<td><code>N/A</code></td>
-<td><code>N/A</code></td>
-<td><code>N/A</code></td>
+<td>Ethereum Mainnet (Production)</td>
+<td><code>0x2b7a5fbba87ebb3089525d5fd61b914a6656ff6b</code></td>
+<td><code>0x0cabe65b0adc1634f56ea66a36abb70f2d4232c5</code></td>
+<td><code>0xa78db4a8efccd5812e0044496edcc571da3d24c6</code></td>
+<td><code>0x7d70d1bb78e3a7252a52ee9e15ee9ba1f3ee3880</code></td>
+<td><code>0xee68ace998cd93c34c6fb3d7f5ce6b22fc440886</code></td>
 </tr>
 <tr>
 <td>Ethereum Sepolia (Test)</td>
