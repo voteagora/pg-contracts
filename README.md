@@ -14,7 +14,7 @@
 <th>Membership</th>
 </tr>
 <tr>
-<td>Mainnet (Production)</td>
+<td>Ethereum Mainnet (Production)</td>
 <td><code>0x2b7a5fbba87ebb3089525d5fd61b914a6656ff6b</code></td>
 <td><code>0x0cabe65b0adc1634f56ea66a36abb70f2d4232c5</code></td>
 <td><code>0xa78db4a8efccd5812e0044496edcc571da3d24c6</code></td>

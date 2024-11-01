@@ -5,7 +5,7 @@ import "forge-std/Script.sol";
 
 import {DeployBase} from "script/deploy/DeployBase.s.sol";
 
-contract DeploySepolia is DeployBase {
+contract DeployMainnet is DeployBase {
     constructor()
         DeployBase(
             0x648BFC4dB7e43e799a84d0f607aF0b4298F932DB,
