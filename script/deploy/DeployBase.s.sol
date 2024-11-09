@@ -50,7 +50,7 @@ abstract contract DeployBase is Script {
             address(
                 new ERC1967Proxy{salt: keccak256(abi.encodePacked("Membership"))}(
                     address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementation"))}()),
-                    abi.encodeWithSignature("initialize(address,address,address)", deployer, deployer, deployer)
+                    abi.encodeWithSignature("initialize(address)", deployer)
                 )
             )
         );

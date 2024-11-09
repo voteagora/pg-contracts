@@ -12,7 +12,8 @@ contract SetupData is Script {
     function run() external {
         Membership token = Membership(0x380afD534539ad1C43c3268E7Cb71BAa766aE6f9);
         AgoraGovernor governor = AgoraGovernor(payable(0x8fFF4C5ABcb31fAc43DcE92f77920F3cB9854fB8));
-        ProposalTypesConfigurator proposalTypesConfigurator = ProposalTypesConfigurator(payable(0x966DAa9da3c7eF86c0F9fd678BD5D8cB1B856577));
+        ProposalTypesConfigurator proposalTypesConfigurator =
+            ProposalTypesConfigurator(payable(0x966DAa9da3c7eF86c0F9fd678BD5D8cB1B856577));
         string memory env = "TEST_KEY_";
 
         uint256[] memory proposalIds = new uint256[](4);
@@ -34,7 +35,6 @@ contract SetupData is Script {
             // Send ether to all wallets
             payable(user).transfer(0.0003 ether);
 
-
             address[] memory targets = new address[](1);
             targets[0] = user;
 
@@ -44,57 +44,77 @@ contract SetupData is Script {
             bytes[] memory calldatas = new bytes[](1);
             calldatas[0] = "";
 
-            uint256 id = governor.hashProposal(targets, values, calldatas, keccak256(bytes(string.concat("Initial proposal for the number ", Strings.toString(i)))));
-
+            uint256 id = governor.hashProposal(
+                targets,
+                values,
+                calldatas,
+                keccak256(bytes(string.concat("Initial proposal for the number ", Strings.toString(i))))
+            );
 
             // Create proposals for each type
-            if ( i == 2 ) {
+            if (i == 2) {
                 vm.stopBroadcast();
                 vm.startBroadcast(userKey);
 
                 proposalIds[0] = id;
 
                 governor.propose(
-                    targets, values, calldatas, string.concat("Initial proposal for the number ", Strings.toString(i)), 0
+                    targets,
+                    values,
+                    calldatas,
+                    string.concat("Initial proposal for the number ", Strings.toString(i)),
+                    0
                 );
                 vm.stopBroadcast();
                 vm.startBroadcast(vm.envUint("DEPLOYER_KEY"));
             }
 
-            if ( i == 3 ) {
+            if (i == 3) {
                 vm.stopBroadcast();
                 vm.startBroadcast(userKey);
 
                 proposalIds[1] = id;
 
                 governor.propose(
-                    targets, values, calldatas, string.concat("Initial proposal for the number ", Strings.toString(i)), 1
+                    targets,
+                    values,
+                    calldatas,
+                    string.concat("Initial proposal for the number ", Strings.toString(i)),
+                    1
                 );
                 vm.stopBroadcast();
                 vm.startBroadcast(vm.envUint("DEPLOYER_KEY"));
             }
 
-            if ( i == 4 ) {
+            if (i == 4) {
                 vm.stopBroadcast();
                 vm.startBroadcast(userKey);
 
                 proposalIds[2] = id;
 
                 governor.propose(
-                    targets, values, calldatas, string.concat("Initial proposal for the number ", Strings.toString(i)), 2
+                    targets,
+                    values,
+                    calldatas,
+                    string.concat("Initial proposal for the number ", Strings.toString(i)),
+                    2
                 );
                 vm.stopBroadcast();
                 vm.startBroadcast(vm.envUint("DEPLOYER_KEY"));
             }
 
-            if ( i == 5 ) {
+            if (i == 5) {
                 vm.stopBroadcast();
                 vm.startBroadcast(userKey);
 
                 proposalIds[3] = id;
 
                 governor.propose(
-                    targets, values, calldatas, string.concat("Initial proposal for the number ", Strings.toString(i)), 3
+                    targets,
+                    values,
+                    calldatas,
+                    string.concat("Initial proposal for the number ", Strings.toString(i)),
+                    3
                 );
                 vm.stopBroadcast();
                 vm.startBroadcast(vm.envUint("DEPLOYER_KEY"));
