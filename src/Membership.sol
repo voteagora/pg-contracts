@@ -32,6 +32,7 @@ contract Membership is
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
+    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     /*//////////////////////////////////////////////////////////////
                                STORAGE
@@ -51,7 +52,7 @@ contract Membership is
                              PUBLIC FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function initialize(address defaultAdmin, address minter, address upgrader) public initializer {
+    function initialize(address defaultAdmin) public initializer {
         __ERC721_init("Protocol Guild Membership", "GUILD");
         __ERC721Burnable_init();
         __AccessControl_init();
@@ -60,13 +61,18 @@ contract Membership is
         __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
-        _grantRole(MINTER_ROLE, minter);
-        _grantRole(UPGRADER_ROLE, upgrader);
+        _grantRole(MINTER_ROLE, defaultAdmin);
+        _grantRole(UPGRADER_ROLE, defaultAdmin);
+        _grantRole(BURNER_ROLE, defaultAdmin);
     }
 
     function safeMint(address to) public onlyRole(MINTER_ROLE) {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
+    }
+
+    function burn(uint256 tokenId) public override onlyRole(BURNER_ROLE) {
+        _update(address(0), tokenId, address(0));
     }
 
     /*//////////////////////////////////////////////////////////////
