@@ -31,7 +31,10 @@ contract SetupData is Script {
             (address user, uint256 userKey) = makeAddrAndKey(string.concat(env, Strings.toString(i)));
             console.log(user, i);
 
-            token.safeMint(user);
+            address[] memory users = new address[](1);
+            users[0] = user;
+
+            token.mint(users);
             // Send ether to all wallets
             payable(user).transfer(0.0003 ether);
 

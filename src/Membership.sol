@@ -66,13 +66,22 @@ contract Membership is
         _grantRole(BURNER_ROLE, defaultAdmin);
     }
 
-    function safeMint(address to) public onlyRole(MINTER_ROLE) {
-        uint256 tokenId = _nextTokenId++;
-        _safeMint(to, tokenId);
+    function mint(address[] calldata recipients) public onlyRole(MINTER_ROLE) {
+        uint256 startTokenId = _nextTokenId;
+        uint256 numRecipients = recipients.length;
+
+        for (uint256 i = 0; i < numRecipients; i++) {
+            _safeMint(recipients[i], startTokenId + i);
+        }
+
+        _nextTokenId = startTokenId + numRecipients;
     }
 
-    function burn(uint256 tokenId) public override onlyRole(BURNER_ROLE) {
-        _update(address(0), tokenId, address(0));
+    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
+        uint256 numTokens = tokenIds.length;
+        for (uint256 i = 0; i < numTokens; i++) {
+            _update(address(0), tokenIds[i], address(0));
+        }
     }
 
     /*//////////////////////////////////////////////////////////////
