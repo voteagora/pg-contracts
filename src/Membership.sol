@@ -77,10 +77,14 @@ contract Membership is
         _nextTokenId = startTokenId + numRecipients;
     }
 
-    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
+    function burn(uint256 tokenId) public override onlyRole(BURNER_ROLE) {
+        _update(address(0), tokenId, _msgSender());
+    }
+
+    function burn(uint256[] calldata tokenIds) public {
         uint256 numTokens = tokenIds.length;
         for (uint256 i = 0; i < numTokens; i++) {
-            _update(address(0), tokenIds[i], address(0));
+            burn(tokenIds[i]);
         }
     }
 
