@@ -3,7 +3,7 @@ pragma solidity ^0.8.22;
 
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721BurnableUpgradeable} from
-    "@openzeppelin/contracts-upgradeable-v5/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+    "./ERC721BurnableUpgradeable.sol";
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/access/AccessControlUpgradeable.sol";
 import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/cryptography/EIP712Upgradeable.sol";
 import {ERC721VotesUpgradeable} from
