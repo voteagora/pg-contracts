@@ -3,7 +3,7 @@ pragma solidity ^0.8.22;
 
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/token/ERC721/ERC721Upgradeable.sol";
 import {ERC721BurnableUpgradeable} from
-    "./ERC721BurnableUpgradeable.sol";
+    "@openzeppelin/contracts-upgradeable-v5/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/access/AccessControlUpgradeable.sol";
 import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/cryptography/EIP712Upgradeable.sol";
 import {ERC721VotesUpgradeable} from
@@ -77,10 +77,14 @@ contract Membership is
         _nextTokenId = startTokenId + numRecipients;
     }
 
-    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
+    function burn(uint256 tokenId) public override onlyRole(BURNER_ROLE) {
+        _update(address(0), tokenId, _msgSender());
+    }
+
+    function burn(uint256[] calldata tokenIds) public {
         uint256 numTokens = tokenIds.length;
         for (uint256 i = 0; i < numTokens; i++) {
-            _update(address(0), tokenIds[i], address(0));
+            burn(tokenIds[i]);
         }
     }
 
