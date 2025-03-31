@@ -39,11 +39,7 @@ abstract contract DeployBase is Script {
         (, address deployer,) = vm.readCallers();
 
         // Proposal types for governor.
-        IProposalTypesConfigurator.ProposalType[] memory proposalTypes =
-            new IProposalTypesConfigurator.ProposalType[](0);
-
-        // Proposal Types Configurator
-        proposalTypesConfigurator = new ProposalTypesConfigurator();
+        ProposalTypesConfigurator.ProposalType[] memory proposalTypes = new ProposalTypesConfigurator.ProposalType[](0);
 
         // Deploy membership
         membership = Membership(
@@ -59,7 +55,8 @@ abstract contract DeployBase is Script {
 
         // Governor
         AgoraGovernor governorImplementation = new AgoraGovernor();
-        address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 1);
+        address proposalTypesAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 1);
+        address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 2);
         address governor = address(
             new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG")}(
                 address(governorImplementation),
@@ -72,10 +69,14 @@ abstract contract DeployBase is Script {
                     governorManager,
                     timelockAddress,
                     proposalTypesConfigurator,
-                    proposalTypes
+                    proposalTypesAddress
                 )
             )
         );
+
+        // Proposal Types Configurator
+        proposalTypesConfigurator = new ProposalTypesConfigurator(address(governor), proposalTypes);
+        assert(address(proposalTypesConfigurator) == proposalTypesAddress);
 
         // Timelock
         address[] memory governorProxy = new address[](1);
