@@ -22,11 +22,16 @@ contract SetupData is Script {
 
         // On the first run:
         // Setup proposal types
-        proposalTypesConfigurator.setProposalType(0, 3_300, 5_100, "Update Splits", "Lorem Ipsum", address(0));
-        proposalTypesConfigurator.setProposalType(1, 3_300, 5_100, "DAO Membership", "Lorem Ipsum", address(0));
+        /*
+        proposalTypesConfigurator.setProposalType(0, 0, 5_100, "Update Splits", "Lorem Ipsum", address(0));
+        proposalTypesConfigurator.setProposalType(1, 0, 5_100, "DAO Membership", "Lorem Ipsum", address(0));
         proposalTypesConfigurator.setProposalType(2, 0, 5_000, "Distribute Splits", "Lorem Ipsum", address(0));
-        proposalTypesConfigurator.setProposalType(3, 3_300, 5_100, "Signal Votes", "Lorem Ipsum", address(0));
+        proposalTypesConfigurator.setProposalType(3, 0, 5_100, "Signal Votes", "Lorem Ipsum", address(0));
+        */
 
+       governor.setManager(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
+       governor.setAdmin(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
+        /*
         for (uint256 i = 1; i < 31; i++) {
             (address user, uint256 userKey) = makeAddrAndKey(string.concat(env, Strings.toString(i)));
             console.log(user, i);
@@ -123,6 +128,7 @@ contract SetupData is Script {
                 vm.startBroadcast(vm.envUint("DEPLOYER_KEY"));
             }
         }
+        */
 
         vm.stopBroadcast();
     }
