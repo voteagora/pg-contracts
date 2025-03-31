@@ -23,11 +23,11 @@
 </tr>
 <tr>
 <td>Ethereum Sepolia (Test)</td>
-<td><code>0x8fFF4C5ABcb31fAc43DcE92f77920F3cB9854fB8</code></td>
-<td><code>0xeba09e62142052831fe0ccdd73476ca5ce84b2f1</code></td>
-<td><code>0x966daa9da3c7ef86c0f9fd678bd5d8cb1b856577</code></td>
-<td><code>0xf24942a6f7bce11f6889fe8f72b9315b3aa9340f</code></td>
-<td><code>0x380afD534539ad1C43c3268E7Cb71BAa766aE6f9</code></td>
+<td><code>0x1Ec062fc98be10314CF902d5Aa101403D2ACbF73</code></td>
+<td><code>0x05a9C4a400cfA64C9639cc2f00B2CF95710f9af1</code></td>
+<td><code>0xf8D15c3132eFA557989A1C9331B6667Ca8Caa3a9</code></td>
+<td><code>0x239dcb72dF956e27a64f458cB49FEf0732B1f291</code></td>
+<td><code>0xB3E34f8eFE825dD84137124f4A552c049BB0EC42</code></td>
 </tr>
 </table>
 
