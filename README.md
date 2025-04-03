@@ -15,11 +15,11 @@
 </tr>
 <tr>
 <td>Ethereum Mainnet (Production)</td>
-<td><code>0x42baa004ff081ba7e3b2b810e7a9b4e0e35e8b01</code></td>
-<td><code>0x0cabe65b0adc1634f56ea66a36abb70f2d4232c5</code></td>
-<td><code>0xa78db4a8efccd5812e0044496edcc571da3d24c6</code></td>
-<td><code>0x7d70d1bb78e3a7252a52ee9e15ee9ba1f3ee3880</code></td>
-<td><code>0x95fc87e77977a70b08c76b0a7714069d8ff0ff2b</code></td>
+<td><code>0x5cA68E30dFf2A96C1e06eE1bF8609096a806f692</code></td>
+<td><code>0x4E2e3509F4C77Df377FeE48e3969BB7000B9FAF1</code></td>
+<td><code>0x368723068b6C762b416e5A7d506a605E8b816C22</code></td>
+<td><code>0x4990CcE6e8CD9596305b83C4860D4C0f3Bf4e8fa</code></td>
+<td><code>0xB3E34f8eFE825dD84137124f4A552c049BB0EC42</code></td>
 </tr>
 <tr>
 <td>Ethereum Sepolia (Test)</td>
