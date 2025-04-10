@@ -10,7 +10,7 @@ import {Membership} from "src/Membership.sol";
 
 contract SetupData is Script {
     function run() external {
-        Membership token = Membership(0xB3E34f8eFE825dD84137124f4A552c049BB0EC42);
+        Membership token = Membership(0x27B0031c64F4231F0Aff28E668553d73F48125f3);
         AgoraGovernor governor = AgoraGovernor(payable(0x8fFF4C5ABcb31fAc43DcE92f77920F3cB9854fB8));
         ProposalTypesConfigurator proposalTypesConfigurator =
             ProposalTypesConfigurator(payable(0x966DAa9da3c7eF86c0F9fd678BD5D8cB1B856577));

@@ -44,8 +44,8 @@ abstract contract DeployBase is Script {
         // Deploy membership
         membership = Membership(
             address(
-                new ERC1967Proxy{salt: keccak256(abi.encodePacked("Membership"))}(
-                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementation"))}()),
+                new ERC1967Proxy{salt: keccak256(abi.encodePacked("MembershipProd"))}(
+                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementationProd"))}()),
                     abi.encodeWithSignature("initialize(address)", deployer)
                 )
             )
@@ -58,7 +58,7 @@ abstract contract DeployBase is Script {
         address proposalTypesAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 1);
         address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 2);
         address governor = address(
-            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG")}(
+            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPGProd")}(
                 address(governorImplementation),
                 address(proxyAdmin),
                 abi.encodeWithSelector(
@@ -68,7 +68,6 @@ abstract contract DeployBase is Script {
                     governorAdmin,
                     governorManager,
                     timelockAddress,
-                    proposalTypesConfigurator,
                     proposalTypesAddress
                 )
             )
