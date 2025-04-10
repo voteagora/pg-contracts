@@ -1,16 +1,16 @@
 {
   "main": {
-    "AgoraGovernor.sol": "0xB3E34f8eFE825dD84137124f4A552c049BB0EC42",
-    "TimelockController.sol": "0x4E2e3509F4C77Df377FeE48e3969BB7000B9FAF1",
-    "ProposalTypesConfigurator.sol": "0x368723068b6C762b416e5A7d506a605E8b816C22",
-    "ProxyAdmin.sol": "0x4990CcE6e8CD9596305b83C4860D4C0f3Bf4e8fa",
-    "Membership.sol": "0xB3E34f8eFE825dD84137124f4A552c049BB0EC42"
+    "AgoraGovernor.sol": "0xE35CaF04cD55192c04c93f3b1779A13F503e5942",
+    "TimelockController.sol": "0x7751f14e211150F54D9ADD4727f7D6E9a07d4cDb",
+    "ProposalTypesConfigurator.sol": "0x7ca4a290a00A99829CdD6ED9D25D6e77e5544499"",
+    "ProxyAdmin.sol": "0x7a0f7659103cfc42f3Eeb265EDb0205bE9B25490",
+    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3"
   },
   "test": {
-    "AgoraGovernor.sol": "0x1Ec062fc98be10314CF902d5Aa101403D2ACbF73",
-    "TimelockController.sol": "0x05a9C4a400cfA64C9639cc2f00B2CF95710f9af1",
-    "ProposalTypesConfigurator.sol": "0xf8D15c3132eFA557989A1C9331B6667Ca8Caa3a9",
-    "ProxyAdmin.sol": "0x239dcb72dF956e27a64f458cB49FEf0732B1f291",
-    "Membership.sol": "0xB3E34f8eFE825dD84137124f4A552c049BB0EC42"
+    "AgoraGovernor.sol": "0xa6388314Fe37484883266970967AB918996F3bF0",
+    "TimelockController.sol": "0x184ad2fD9959b8F5C247Ff1188114Dffd12069a0",
+    "ProposalTypesConfigurator.sol": "0xB7687e62D6b2cafb3ED3c3c81b0B6Cf0a3884602",
+    "ProxyAdmin.sol": "0x21727CD3929eE4aAB706399BE8F57d173644Dc5c",
+    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3"
   }
 }
