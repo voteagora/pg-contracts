@@ -4,13 +4,15 @@
     "TimelockController.sol": "0x7751f14e211150F54D9ADD4727f7D6E9a07d4cDb",
     "ProposalTypesConfigurator.sol": "0x7ca4a290a00A99829CdD6ED9D25D6e77e5544499",
     "ProxyAdmin.sol": "0x7a0f7659103cfc42f3Eeb265EDb0205bE9B25490",
-    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3"
+    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3",
+    "OptimisticModule.sol": ""
   },
   "test": {
     "AgoraGovernor.sol": "0xa6388314Fe37484883266970967AB918996F3bF0",
     "TimelockController.sol": "0x184ad2fD9959b8F5C247Ff1188114Dffd12069a0",
     "ProposalTypesConfigurator.sol": "0xB7687e62D6b2cafb3ED3c3c81b0B6Cf0a3884602",
     "ProxyAdmin.sol": "0x21727CD3929eE4aAB706399BE8F57d173644Dc5c",
-    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3"
+    "Membership.sol": "0x27B0031c64F4231F0Aff28E668553d73F48125f3",
+    "OptimisticModule.sol": "0x4414D030cFfEC5Edc011a27c653Ce21704b12d85"
   }
 }

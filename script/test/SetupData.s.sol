@@ -3,36 +3,60 @@ pragma solidity ^0.8.19;
 import "forge-std/Script.sol";
 
 import {Strings} from "@openzeppelin/contracts-v4/utils/Strings.sol";
-import {ProposalTypesConfigurator} from "agora-governor/ProposalTypesConfigurator.sol";
+import {ProposalTypesConfigurator, IProposalTypesConfigurator} from "agora-governor/ProposalTypesConfigurator.sol";
 import {AgoraGovernor} from "agora-governor/AgoraGovernor.sol";
-import {IProposalTypesConfigurator} from "agora-governor/interfaces/IProposalTypesConfigurator.sol";
 import {Membership} from "src/Membership.sol";
+import {OptimisticModule} from "agora-governor/modules/OptimisticModule.sol";
 
 contract SetupData is Script {
     function run() external {
-        Membership token = Membership(0x27B0031c64F4231F0Aff28E668553d73F48125f3);
-        AgoraGovernor governor = AgoraGovernor(payable(0x8fFF4C5ABcb31fAc43DcE92f77920F3cB9854fB8));
+        // Membership token = Membership(0x27B0031c64F4231F0Aff28E668553d73F48125f3);
+        AgoraGovernor governor = AgoraGovernor(payable(0xa6388314Fe37484883266970967AB918996F3bF0));
         ProposalTypesConfigurator proposalTypesConfigurator =
-            ProposalTypesConfigurator(payable(0x966DAa9da3c7eF86c0F9fd678BD5D8cB1B856577));
-        string memory env = "TEST_KEY_";
+            ProposalTypesConfigurator(payable(0xB7687e62D6b2cafb3ED3c3c81b0B6Cf0a3884602));
+        // string memory env = "TEST_KEY_";
 
-        uint256[] memory proposalIds = new uint256[](4);
+        // uint256[] memory proposalIds = new uint256[](4);
 
         vm.startBroadcast();
         (, address deployer,) = vm.readCallers();
 
+        // Deploy module
+        OptimisticModule optimistic = new OptimisticModule(address(governor));
+        AgoraGovernor(payable(governor)).setModuleApproval(address(optimistic), true);
+
         // On the first run:
         // Setup proposal types
+        proposalTypesConfigurator.setProposalType(
+            0, 3_300, 5_100, "Signal Votes", "Simple Majority", address(optimistic)
+        );
+        proposalTypesConfigurator.setProposalType(
+            1, 0, 5_100, "Distribute Splits", "Set splits distribution", address(0)
+        );
+        proposalTypesConfigurator.setProposalType(
+            2, 3_300, 5_100, "Update Splits", "All other split contract calls", address(0)
+        );
+
+        // Set scope
+        address contractAddress = 0x02B27A65975a62CD8DE7D22620Bc9Cd98e79f904;
+        bytes24 scopeKey = _pack(contractAddress, bytes4(0x2d3f5537)); // distribute
+
+        bytes[] memory parameters = new bytes[](1);
+        parameters[0] = abi.encode(uint256(0));
+
+        IProposalTypesConfigurator.Comparators[] memory comparators = new IProposalTypesConfigurator.Comparators[](1);
+        comparators[0] = IProposalTypesConfigurator.Comparators(0); // EQ
+        IProposalTypesConfigurator.SupportedTypes[] memory types = new IProposalTypesConfigurator.SupportedTypes[](1);
+        types[0] = IProposalTypesConfigurator.SupportedTypes(0); // NONE - do not check the params
+
+        // Set scope for distribute splits
+        proposalTypesConfigurator.setScopeForProposalType(
+            1, scopeKey, bytes4(0x2d3f5537), parameters, comparators, types, "Distribute splits contract"
+        );
+
+        // governor.setManager(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
+        // governor.setAdmin(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
         /*
-        proposalTypesConfigurator.setProposalType(0, 0, 5_100, "Update Splits", "Lorem Ipsum", address(0));
-        proposalTypesConfigurator.setProposalType(1, 0, 5_100, "DAO Membership", "Lorem Ipsum", address(0));
-        proposalTypesConfigurator.setProposalType(2, 0, 5_000, "Distribute Splits", "Lorem Ipsum", address(0));
-        proposalTypesConfigurator.setProposalType(3, 0, 5_100, "Signal Votes", "Lorem Ipsum", address(0));
-        */
-
-       // governor.setManager(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
-       // governor.setAdmin(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
-
         token.grantRole(token.MINTER_ROLE(), deployer);
 
         address[] memory holders = new address[](11);
@@ -50,6 +74,7 @@ contract SetupData is Script {
         holders[10] = deployer;
 
         token.mint(holders);
+        */
 
         /*
         for (uint256 i = 1; i < 31; i++) {
@@ -155,4 +180,13 @@ contract SetupData is Script {
 
     // Exclude from coverage report
     function test() public {}
+
+    function _pack(address contractAddress, bytes4 selector) internal pure returns (bytes24 result) {
+        bytes20 left = bytes20(contractAddress);
+        assembly ("memory-safe") {
+            left := and(left, shl(96, not(0)))
+            selector := and(selector, shl(224, not(0)))
+            result := or(left, shr(160, selector))
+        }
+    }
 }
