@@ -12,6 +12,7 @@
 <th>ProposalTypesConfigurator</th>
 <th>ProxyAdmin</th>
 <th>Membership</th>
+<th>OptimisticModule</th>
 </tr>
 <tr>
 <td>Ethereum Mainnet (Production)</td>
@@ -20,6 +21,7 @@
 <td><code>0x7ca4a290a00A99829CdD6ED9D25D6e77e5544499</code></td>
 <td><code>0x7a0f7659103cfc42f3Eeb265EDb0205bE9B25490</code></td>
 <td><code>0x27B0031c64F4231F0Aff28E668553d73F48125f3</code></td>
+<td><code>N/A</code></td>
 </tr>
 <tr>
 <td>Ethereum Sepolia (Test)</td>
@@ -28,6 +30,7 @@
 <td><code>0xB7687e62D6b2cafb3ED3c3c81b0B6Cf0a3884602</code></td>
 <td><code>0x21727CD3929eE4aAB706399BE8F57d173644Dc5c</code></td>
 <td><code>0x27B0031c64F4231F0Aff28E668553d73F48125f3</code></td>
+<td><code>0x4414D030cFfEC5Edc011a27c653Ce21704b12d85</code></td>
 </tr>
 </table>
 
