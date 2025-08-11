@@ -4,8 +4,8 @@ pragma solidity ^0.8.22;
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/access/AccessControlUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable-v5/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/proxy/utils/UUPSUpgradeable.sol";
-import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/cryptography/EIP712Upgradeable.sol";
 import {ContextUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/ContextUpgradeable.sol";
+import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {VotesUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/governance/utils/VotesUpgradeable.sol";
 
@@ -13,6 +13,7 @@ contract GovernanceToken is
     Initializable,
     AccessControlUpgradeable,
     UUPSUpgradeable,
+    IERC721Metadata,
     VotesUpgradeable
 {
     using Strings for uint256;
@@ -52,11 +53,7 @@ contract GovernanceToken is
 
     mapping(address owner => uint256) private _balances;
 
-    mapping(uint256 tokenId => address) private _tokenApprovals;
-
-    mapping(address owner => mapping(address operator => bool)) private _operatorApprovals;
-
-    event Transfer(address from, address to, uint256 tokenId);
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
@@ -70,7 +67,10 @@ contract GovernanceToken is
                              PUBLIC FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function initialize(address defaultAdmin, address _timelock, string memory name_, string memory symbol_) public initializer {
+    function initialize(address defaultAdmin, address _timelock, string memory name_, string memory symbol_)
+        public
+        initializer
+    {
         __AccessControl_init();
         __UUPSUpgradeable_init();
         // __EIP712_init("Protocol Guild Membership", "1");
@@ -88,10 +88,10 @@ contract GovernanceToken is
     }
 
     function balanceOf(address owner) public view virtual returns (uint256) {
-            if (owner == address(0)) {
-                revert InvalidOwner(address(0));
-            }
-            return _balances[owner];
+        if (owner == address(0)) {
+            revert InvalidOwner(address(0));
+        }
+        return _balances[owner];
     }
 
     function ownerOf(uint256 tokenId) public view virtual returns (address) {
@@ -156,14 +156,11 @@ contract GovernanceToken is
      * @dev Transfers `tokenId` from its current owner to `to`, or alternatively mints (or burns) if the current owner
      * (or `to`) is the zero address. Returns the owner of the `tokenId` before the update.
      *
-     * The `auth` argument is optional. If the value passed is non 0, then this function will check that
-     * `auth` is either the owner of the token, or approved to operate on the token (by the owner).
-     *
      * Emits a {Transfer} event.
      *
      * NOTE: If overriding this function in a way that tracks balances, see also {_increaseBalance}.
      */
-    function _update(address to, uint256 tokenId, address auth) internal virtual returns (address) {
+    function _update(address to, uint256 tokenId) internal virtual returns (address) {
         address from = _ownerOf(tokenId);
 
         // Execute the update
@@ -204,7 +201,7 @@ contract GovernanceToken is
         if (to == address(0)) {
             revert InvalidReceiver(address(0));
         }
-        address previousOwner = _update(to, tokenId, address(0));
+        address previousOwner = _update(to, tokenId);
         if (previousOwner != address(0)) {
             revert InvalidSender(address(0));
         }
@@ -213,7 +210,6 @@ contract GovernanceToken is
     function _safeMint(address to, uint256 tokenId) internal {
         _mint(to, tokenId);
     }
-
 
     /**
      * @dev Destroys `tokenId`.
@@ -227,7 +223,7 @@ contract GovernanceToken is
      * Emits a {Transfer} event.
      */
     function _burn(uint256 tokenId) internal {
-        address previousOwner = _update(address(0), tokenId, address(0));
+        address previousOwner = _update(address(0), tokenId);
         if (previousOwner == address(0)) {
             revert NonexistentToken(tokenId);
         }
@@ -238,6 +234,7 @@ contract GovernanceToken is
      *
      * Overrides to ownership logic should be done to {_ownerOf}.
      */
+
     function _requireOwned(uint256 tokenId) internal view returns (address) {
         address owner = _ownerOf(tokenId);
         if (owner == address(0)) {
@@ -247,7 +244,6 @@ contract GovernanceToken is
     }
 
     function mint(address[] calldata recipients) public onlyRole(MINTER_ROLE) {
-        /*
         uint256 startTokenId = _nextTokenId;
         uint256 numRecipients = recipients.length;
 
@@ -256,20 +252,17 @@ contract GovernanceToken is
         }
 
         _nextTokenId = startTokenId + numRecipients;
-        */
     }
 
     function burn(uint256 tokenId) public onlyRole(BURNER_ROLE) {
-        // _update(address(0), tokenId, _msgSender());
+        _update(address(0), tokenId);
     }
 
-    function burn(uint256[] calldata tokenIds) public {
-        /*
+    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
         uint256 numTokens = tokenIds.length;
         for (uint256 i = 0; i < numTokens; i++) {
             burn(tokenIds[i]);
         }
-        */
     }
 
     /**
@@ -287,4 +280,3 @@ contract GovernanceToken is
 
     function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
 }
-

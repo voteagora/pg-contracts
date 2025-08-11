@@ -44,7 +44,8 @@ abstract contract DeployBase is Script {
 
         address governorAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 3);
         // Proposal Types Configurator
-        proposalTypesConfigurator = new ProposalTypesConfigurator(address(governorAddress), new ProposalTypesConfigurator.ProposalType[](0));
+        proposalTypesConfigurator =
+            new ProposalTypesConfigurator(address(governorAddress), new ProposalTypesConfigurator.ProposalType[](0));
 
         // Deploy membership
         membership = Membership(
