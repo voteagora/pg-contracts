@@ -39,6 +39,8 @@ contract Membership is
     //////////////////////////////////////////////////////////////*/
 
     uint256 private _nextTokenId;
+    address private admin;
+    address private timelock;
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
@@ -52,7 +54,7 @@ contract Membership is
                              PUBLIC FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function initialize(address defaultAdmin) public initializer {
+    function initialize(address defaultAdmin, address _timelock) public initializer {
         __ERC721_init("Protocol Guild Membership", "GUILD");
         __ERC721Burnable_init();
         __AccessControl_init();
@@ -60,10 +62,14 @@ contract Membership is
         __ERC721Votes_init();
         __UUPSUpgradeable_init();
 
+        admin = defaultAdmin;
+        timelock = _timelock;
+
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(MINTER_ROLE, defaultAdmin);
         _grantRole(UPGRADER_ROLE, defaultAdmin);
         _grantRole(BURNER_ROLE, defaultAdmin);
+        _grantRole(BURNER_ROLE, timelock);
     }
 
     function mint(address[] calldata recipients) public onlyRole(MINTER_ROLE) {
