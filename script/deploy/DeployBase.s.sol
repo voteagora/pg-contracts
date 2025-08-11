@@ -42,8 +42,9 @@ abstract contract DeployBase is Script {
         IProposalTypesConfigurator.ProposalType[] memory proposalTypes =
             new IProposalTypesConfigurator.ProposalType[](0);
 
+        address governorAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 3);
         // Proposal Types Configurator
-        proposalTypesConfigurator = new ProposalTypesConfigurator();
+        proposalTypesConfigurator = new ProposalTypesConfigurator(address(governorAddress), new ProposalTypesConfigurator.ProposalType[](0));
 
         // Deploy membership
         membership = Membership(
@@ -76,6 +77,8 @@ abstract contract DeployBase is Script {
                 )
             )
         );
+
+        assert(address(governor) == governorAddress);
 
         // Timelock
         address[] memory governorProxy = new address[](1);
