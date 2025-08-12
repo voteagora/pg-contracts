@@ -5,7 +5,7 @@ import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/a
 import {Initializable} from "@openzeppelin/contracts-upgradeable-v5/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/proxy/utils/UUPSUpgradeable.sol";
 import {ContextUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/ContextUpgradeable.sol";
-import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable-v5/utils/cryptography/EIP712Upgradeable.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {VotesUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/governance/utils/VotesUpgradeable.sol";
 
@@ -13,7 +13,7 @@ contract GovernanceToken is
     Initializable,
     AccessControlUpgradeable,
     UUPSUpgradeable,
-    IERC721Metadata,
+    EIP712Upgradeable,
     VotesUpgradeable
 {
     using Strings for uint256;
@@ -39,18 +39,19 @@ contract GovernanceToken is
                                STORAGE
     //////////////////////////////////////////////////////////////*/
 
+    // Batch Mint
     uint256 private _nextTokenId;
+    // Default Admin and Burning / Minting Role for any GovToken
     address private admin;
+    // Governance Execution to handle minting / burning
     address private timelock;
-
     // Token name
     string private _name;
-
     // Token symbol
     string private _symbol;
-
+    // Token Owners
     mapping(uint256 tokenId => address) private _owners;
-
+    // Balances of token holdings
     mapping(address owner => uint256) private _balances;
 
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
@@ -73,7 +74,7 @@ contract GovernanceToken is
     {
         __AccessControl_init();
         __UUPSUpgradeable_init();
-        // __EIP712_init("Protocol Guild Membership", "1");
+        __EIP712_init("Protocol Guild Membership", "1");
 
         admin = defaultAdmin;
         timelock = _timelock;
@@ -113,6 +114,32 @@ contract GovernanceToken is
         return bytes(baseURI).length > 0 ? string.concat(baseURI, tokenId.toString()) : "";
     }
 
+    function mint(address[] calldata recipients) public onlyRole(MINTER_ROLE) {
+        uint256 startTokenId = _nextTokenId;
+        uint256 numRecipients = recipients.length;
+
+        for (uint256 i = 0; i < numRecipients; i++) {
+            _safeMint(recipients[i], startTokenId + i);
+        }
+
+        _nextTokenId = startTokenId + numRecipients;
+    }
+
+    function burn(uint256 tokenId) public onlyRole(BURNER_ROLE) {
+        _update(address(0), tokenId);
+    }
+
+    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
+        uint256 numTokens = tokenIds.length;
+        for (uint256 i = 0; i < numTokens; i++) {
+            burn(tokenIds[i]);
+        }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            INTERNAL FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
     /**
      * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
      * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
@@ -125,10 +152,6 @@ contract GovernanceToken is
     /**
      * @dev Returns the owner of the `tokenId`. Does NOT revert if token doesn't exist
      *
-     * IMPORTANT: Any overrides to this function that add ownership of tokens not tracked by the
-     * core ERC-721 logic MUST be matched with the use of {_increaseBalance} to keep balances
-     * consistent with ownership. The invariant to preserve is that for any address `a` the value returned by
-     * `balanceOf(a)` must be equal to the number of tokens such that `_ownerOf(tokenId)` is `a`.
      */
     function _ownerOf(uint256 tokenId) internal view virtual returns (address) {
         return _owners[tokenId];
@@ -228,41 +251,19 @@ contract GovernanceToken is
             revert NonexistentToken(tokenId);
         }
     }
+
     /**
      * @dev Reverts if the `tokenId` doesn't have a current owner (it hasn't been minted, or it has been burned).
      * Returns the owner.
      *
      * Overrides to ownership logic should be done to {_ownerOf}.
      */
-
     function _requireOwned(uint256 tokenId) internal view returns (address) {
         address owner = _ownerOf(tokenId);
         if (owner == address(0)) {
             revert NonexistentToken(tokenId);
         }
         return owner;
-    }
-
-    function mint(address[] calldata recipients) public onlyRole(MINTER_ROLE) {
-        uint256 startTokenId = _nextTokenId;
-        uint256 numRecipients = recipients.length;
-
-        for (uint256 i = 0; i < numRecipients; i++) {
-            _safeMint(recipients[i], startTokenId + i);
-        }
-
-        _nextTokenId = startTokenId + numRecipients;
-    }
-
-    function burn(uint256 tokenId) public onlyRole(BURNER_ROLE) {
-        _update(address(0), tokenId);
-    }
-
-    function burn(uint256[] calldata tokenIds) public onlyRole(BURNER_ROLE) {
-        uint256 numTokens = tokenIds.length;
-        for (uint256 i = 0; i < numTokens; i++) {
-            burn(tokenIds[i]);
-        }
     }
 
     /**
@@ -273,10 +274,6 @@ contract GovernanceToken is
     function _getVotingUnits(address account) internal view virtual override returns (uint256) {
         return balanceOf(account);
     }
-
-    /*//////////////////////////////////////////////////////////////
-                            INTERNAL FUNCTIONS
-    //////////////////////////////////////////////////////////////*/
 
     function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
 }
