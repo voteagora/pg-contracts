@@ -29,8 +29,8 @@ contract SetupData is Script {
         proposalTypesConfigurator.setProposalType(3, 0, 5_100, "Signal Votes", "Lorem Ipsum", address(0));
         */
 
-       governor.setManager(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
-       governor.setAdmin(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
+        governor.setManager(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
+        governor.setAdmin(0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0);
         /*
         for (uint256 i = 1; i < 31; i++) {
             (address user, uint256 userKey) = makeAddrAndKey(string.concat(env, Strings.toString(i)));
