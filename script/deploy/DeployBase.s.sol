@@ -14,14 +14,15 @@ import {ProposalTypesConfigurator} from "agora-governor/ProposalTypesConfigurato
 import {AgoraGovernor} from "agora-governor/AgoraGovernor.sol";
 import {IProposalTypesConfigurator} from "agora-governor/interfaces/IProposalTypesConfigurator.sol";
 import {ApprovalVotingModule} from "agora-governor/modules/ApprovalVotingModule.sol";
+import {OptimisticModule} from "agora-governor/modules/OptimisticModule.sol";
 
-import {Membership} from "src/Membership.sol";
+import {GovernanceToken} from "src/GovernanceToken.sol";
 
 abstract contract DeployBase is Script {
     ProxyAdmin proxyAdmin;
     ProposalTypesConfigurator proposalTypesConfigurator;
     TimelockController timelock;
-    Membership membership;
+    GovernanceToken govToken;
 
     address governorAdmin;
     address governorManager;
@@ -39,36 +40,39 @@ abstract contract DeployBase is Script {
         (, address deployer,) = vm.readCallers();
 
         // Proposal types for governor.
-        IProposalTypesConfigurator.ProposalType[] memory proposalTypes =
-            new IProposalTypesConfigurator.ProposalType[](0);
-
-        address governorAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 3);
-        // Proposal Types Configurator
-        proposalTypesConfigurator =
-            new ProposalTypesConfigurator(address(governorAddress), new ProposalTypesConfigurator.ProposalType[](0));
-
-        // Deploy membership
-        membership = Membership(
-            address(
-                new ERC1967Proxy{salt: keccak256(abi.encodePacked("Membership"))}(
-                    address(new Membership{salt: keccak256(abi.encodePacked("MembershipImplementation"))}()),
-                    abi.encodeWithSignature("initialize(address)", deployer)
-                )
-            )
-        );
+        ProposalTypesConfigurator.ProposalType[] memory proposalTypes = new ProposalTypesConfigurator.ProposalType[](0);
 
         proxyAdmin = new ProxyAdmin();
 
         // Governor
         AgoraGovernor governorImplementation = new AgoraGovernor();
-        address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 1);
+
+        address proposalTypesAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 3);
+        address timelockAddress = vm.computeCreateAddress(deployer, vm.getNonce(deployer) + 4);
+
+        // Deploy membership
+        govToken = GovernanceToken(
+            address(
+                new ERC1967Proxy{salt: keccak256(abi.encodePacked("GovToken"))}(
+                    address(new GovernanceToken{salt: keccak256(abi.encodePacked("GovTokenImplementation"))}()),
+                    abi.encodeWithSignature(
+                        "initialize(address,address,string,string)",
+                        deployer,
+                        timelockAddress,
+                        "ProtocolGuild",
+                        "PGUILD"
+                    )
+                )
+            )
+        );
+
         address governor = address(
             new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG")}(
                 address(governorImplementation),
                 address(proxyAdmin),
                 abi.encodeWithSelector(
                     AgoraGovernor.initialize.selector,
-                    membership,
+                    govToken,
                     AgoraGovernor.SupplyType.Total,
                     governorAdmin,
                     governorManager,
@@ -79,7 +83,9 @@ abstract contract DeployBase is Script {
             )
         );
 
-        assert(address(governor) == governorAddress);
+        // Proposal Types Configurator
+        proposalTypesConfigurator = new ProposalTypesConfigurator(address(governor), proposalTypes);
+        assert(address(proposalTypesConfigurator) == proposalTypesAddress);
 
         // Timelock
         address[] memory governorProxy = new address[](1);
@@ -91,6 +97,21 @@ abstract contract DeployBase is Script {
         // Govenor modules
         // ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
         // AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
+
+        // Deploy module
+        OptimisticModule optimistic = new OptimisticModule(address(governor));
+        AgoraGovernor(payable(governor)).setModuleApproval(address(optimistic), true);
+
+        // On the first run:
+        // Setup proposal types
+        proposalTypesConfigurator.setProposalType(0, 0, 0, "Signal Votes", "Simple Majority", address(optimistic));
+
+        proposalTypesConfigurator.setProposalType(
+            1, 0, 5_100, "Distribute Splits", "Set splits distribution", address(0)
+        );
+        proposalTypesConfigurator.setProposalType(
+            2, 3_300, 5_100, "Update Splits", "All other split contract calls", address(0)
+        );
 
         vm.stopBroadcast();
     }
