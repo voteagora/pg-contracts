@@ -77,7 +77,7 @@ abstract contract DeployBase is Script {
                     governorAdmin,
                     governorManager,
                     timelockAddress,
-                    proposalTypesConfigurator,
+                    proposalTypesAddress,
                     proposalTypes
                 )
             )
