@@ -53,8 +53,8 @@ abstract contract DeployBase is Script {
         // Deploy membership
         govToken = GovernanceToken(
             address(
-                new ERC1967Proxy{salt: keccak256(abi.encodePacked("GovToken"))}(
-                    address(new GovernanceToken{salt: keccak256(abi.encodePacked("GovTokenImplementation"))}()),
+                new ERC1967Proxy{salt: keccak256(abi.encodePacked("PGGovToken"))}(
+                    address(new GovernanceToken{salt: keccak256(abi.encodePacked("PGGovTokenImplementation"))}()),
                     abi.encodeWithSignature(
                         "initialize(address,address,string,string)",
                         deployer,
@@ -67,7 +67,7 @@ abstract contract DeployBase is Script {
         );
 
         address governor = address(
-            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG")}(
+            new TransparentUpgradeableProxy{salt: keccak256("AgoraGovernorPG1")}(
                 address(governorImplementation),
                 address(proxyAdmin),
                 abi.encodeWithSelector(

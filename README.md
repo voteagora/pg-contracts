@@ -11,7 +11,7 @@
 <th>Timelock</th>
 <th>ProposalTypesConfigurator</th>
 <th>ProxyAdmin</th>
-<th>Membership</th>
+<th>GovToken</th>
 </tr>
 <tr>
 <td>Ethereum Mainnet (Production)</td>
@@ -23,11 +23,11 @@
 </tr>
 <tr>
 <td>Ethereum Sepolia (Test)</td>
-<td><code>0x8C177a1735520A571F76e29D4259a8c42Bf4254f</code></td>
-<td><code>0x5c5a1a4671f1feba6b37911fc40bd6974b653fd5</code></td>
-<td><code>0x1f31d2f02875fdc69d092bce819a15a23bc1a3d1</code></td>
-<td><code>0x3d0ee8700f3a2267a677504ffedae54a15abbe7b</code></td>
-<td><code>0xfffa91ea8800532f9d8f987829bdfcc11f385fa6</code></td>
+<td><code>0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA</code></td>
+<td><code>0xF5B87BD1206d7658C344Fe1CB56D9498B4286A67</code></td>
+<td><code>0xb1155A59A8B2bff8f028d5f22EEB18d2841B821E</code></td>
+<td><code>0x1a5628aF2C02B9513722Cc22FF606724C67Ecb76</code></td>
+<td><code>0xE3D4a55f780C5aD9B3009523CB6a3d900A8FA723</code></td>
 </tr>
 </table>
 
