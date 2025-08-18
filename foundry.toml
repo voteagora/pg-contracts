@@ -10,5 +10,6 @@ remappings = [
     "agora-governor/=lib/agora-governor/",
     "src/lib/=lib/agora-governor/src/lib/"
 ]
+evm_version = "cancun"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
