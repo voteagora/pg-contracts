@@ -3,24 +3,25 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
 import {GovernanceToken} from "src/GovernanceToken.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable-v5/proxy/utils/UUPSUpgradeable.sol";
+
+// This is the TransparentUpgradeableProxy itself
+interface ITransparentUpgradeableProxy {
+    function upgradeTo(address newImplementation) external;
+}
 
 contract UpgradeGovernanceToken is Script {
     function run() external {
-        // Address of the deployed proxy (Sepolia testnet)
+        // Proxy address (the one users interact with)
         address proxyAddress = 0xE3D4a55f780C5aD9B3009523CB6a3d900A8FA723;
-        
-        vm.startBroadcast();
-        
+
+        vm.startBroadcast(); // must be the admin EOA here
+
         // Deploy new implementation
         GovernanceToken newImplementation = new GovernanceToken();
-        
-        // Call upgradeToAndCall through the UUPSUpgradeable interface
-        UUPSUpgradeable(proxyAddress).upgradeToAndCall(
-            address(newImplementation),
-            bytes("") // Empty bytes for no initialization
-        );
-        
+
+        // Call upgradeTo directly on the proxy
+        ITransparentUpgradeableProxy(proxyAddress).upgradeTo(address(newImplementation));
+
         vm.stopBroadcast();
     }
 }
