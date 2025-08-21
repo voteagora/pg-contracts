@@ -14,14 +14,6 @@
 <th>GovToken</th>
 </tr>
 <tr>
-<td>Ethereum Mainnet (Production)</td>
-<td><code>0x42baa004ff081ba7e3b2b810e7a9b4e0e35e8b01</code></td>
-<td><code>0x0cabe65b0adc1634f56ea66a36abb70f2d4232c5</code></td>
-<td><code>0xa78db4a8efccd5812e0044496edcc571da3d24c6</code></td>
-<td><code>0x7d70d1bb78e3a7252a52ee9e15ee9ba1f3ee3880</code></td>
-<td><code>0x95fc87e77977a70b08c76b0a7714069d8ff0ff2b</code></td>
-</tr>
-<tr>
 <td>Ethereum Sepolia (Test)</td>
 <td><code>0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA</code></td>
 <td><code>0xF5B87BD1206d7658C344Fe1CB56D9498B4286A67</code></td>
