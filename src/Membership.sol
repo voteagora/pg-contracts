@@ -83,7 +83,11 @@ contract Membership is
         _nextTokenId = startTokenId + numRecipients;
     }
 
-    function burn(uint256 tokenId) public override onlyRole(BURNER_ROLE) {
+    function burn(uint256 tokenId) public override {
+        require(
+            hasRole(BURNER_ROLE, _msgSender()) || ownerOf(tokenId) == _msgSender(),
+            "Caller must be owner or have BURNER_ROLE"
+        );
         _update(address(0), tokenId, _msgSender());
     }
 
