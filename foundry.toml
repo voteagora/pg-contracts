@@ -6,10 +6,5 @@ optimizer       = true                                  # Enable or disable the 
 optimizer_runs  = 200                                   # The number of optimizer runs
 solc_version    = '0.8.26'                              # Override for the solc version
 via_ir          = true                                  # Enable IR-based compilation to avoid stack too deep errors
-remappings = [
-    "agora-governor/=lib/agora-governor/",
-    "src/lib/=lib/agora-governor/src/lib/"
-]
-evm_version = "cancun"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
