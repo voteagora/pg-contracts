@@ -75,6 +75,7 @@ contract GovernanceToken is
         __AccessControl_init();
         __UUPSUpgradeable_init();
         __EIP712_init("Protocol Guild Membership", "1");
+        __Votes_init();
 
         admin = defaultAdmin;
         timelock = _timelock;
