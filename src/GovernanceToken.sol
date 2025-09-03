@@ -21,7 +21,6 @@ contract GovernanceToken is
                                  ERRORS
     //////////////////////////////////////////////////////////////*/
 
-    error NotTransferable();
     error InvalidOwner(address);
     error InvalidSender(address);
     error InvalidReceiver(address);
@@ -41,10 +40,6 @@ contract GovernanceToken is
 
     // Batch Mint
     uint256 private _nextTokenId;
-    // Default Admin and Burning / Minting Role for any GovToken
-    address private admin;
-    // Governance Execution to handle minting / burning
-    address private timelock;
     // Token name
     string private _name;
     // Token symbol
@@ -76,8 +71,6 @@ contract GovernanceToken is
         __UUPSUpgradeable_init();
         __EIP712_init("Protocol Guild Membership", "1");
 
-        admin = defaultAdmin;
-        timelock = _timelock;
         _name = name_;
         _symbol = symbol_;
 
@@ -85,7 +78,7 @@ contract GovernanceToken is
         _grantRole(MINTER_ROLE, defaultAdmin);
         _grantRole(UPGRADER_ROLE, defaultAdmin);
         _grantRole(BURNER_ROLE, defaultAdmin);
-        _grantRole(BURNER_ROLE, timelock);
+        _grantRole(BURNER_ROLE, _timelock);
     }
 
     function balanceOf(address owner) public view virtual returns (uint256) {
@@ -162,30 +155,11 @@ contract GovernanceToken is
     }
 
     /**
-     * @dev Unsafe write access to the balances, used by extensions that "mint" tokens using an {ownerOf} override.
-     *
-     * NOTE: the value is limited to type(uint128).max. This protect against _balance overflow. It is unrealistic that
-     * a uint256 would ever overflow from increments when these increments are bounded to uint128 values.
-     *
-     * WARNING: Increasing an account's balance using this function tends to be paired with an override of the
-     * {_ownerOf} function to resolve the ownership of the corresponding tokens so that balances and ownership
-     * remain consistent with one another.
-     */
-    function _increaseBalance(address account, uint128 value) internal virtual {
-        unchecked {
-            _balances[account] += value;
-        }
-
-        _transferVotingUnits(address(0), account, value);
-    }
-
-    /**
      * @dev Transfers `tokenId` from its current owner to `to`, or alternatively mints (or burns) if the current owner
      * (or `to`) is the zero address. Returns the owner of the `tokenId` before the update.
      *
      * Emits a {Transfer} event.
      *
-     * NOTE: If overriding this function in a way that tracks balances, see also {_increaseBalance}.
      */
     function _update(address to, uint256 tokenId) internal virtual returns (address) {
         address from = _ownerOf(tokenId);
@@ -236,24 +210,6 @@ contract GovernanceToken is
 
     function _safeMint(address to, uint256 tokenId) internal {
         _mint(to, tokenId);
-    }
-
-    /**
-     * @dev Destroys `tokenId`.
-     * The approval is cleared when the token is burned.
-     * This is an internal function that does not check if the sender is authorized to operate on the token.
-     *
-     * Requirements:
-     *
-     * - `tokenId` must exist.
-     *
-     * Emits a {Transfer} event.
-     */
-    function _burn(uint256 tokenId) internal {
-        address previousOwner = _update(address(0), tokenId);
-        if (previousOwner == address(0)) {
-            revert NonexistentToken(tokenId);
-        }
     }
 
     /**
