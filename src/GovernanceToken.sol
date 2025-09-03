@@ -70,6 +70,7 @@ contract GovernanceToken is
         __AccessControl_init();
         __UUPSUpgradeable_init();
         __EIP712_init("Protocol Guild Membership", "1");
+        __Votes_init();
 
         _name = name_;
         _symbol = symbol_;
