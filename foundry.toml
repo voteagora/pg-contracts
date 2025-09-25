@@ -7,4 +7,7 @@ optimizer_runs  = 200                                   # The number of optimize
 solc_version    = '0.8.26'                              # Override for the solc version
 evm_version     = "cancun"
 
+# Allow agora-governor to resolve its own imports
+allow_paths = ["lib/agora-governor/src"]
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
