@@ -27,6 +27,8 @@ abstract contract DeployBase is Script {
     address governorAdmin;
     address governorManager;
 
+    address constant public CHEEKY = 0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0;
+
     constructor(address _governorAdmin, address _governorManager) {
         governorAdmin = _governorAdmin;
         governorManager = _governorManager;
@@ -113,19 +115,19 @@ abstract contract DeployBase is Script {
             1, 0, 10_000, "No Quoorum", "Distribute Splits", address(0)
         );
 
-        const CHEEKY = 0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0;
+        // Grant token roles
+        govToken.grantRole(govToken.MINTER_ROLE(), CHEEKY);
+        govToken.grantRole(govToken.BURNER_ROLE(), CHEEKY);
+        govToken.grantRole(govToken.MINTER_ROLE(), address(timelock));
+        govToken.grantRole(govToken.BURNER_ROLE(), address(timelock));
 
-        govToken.grantRole(roles.MINTER_ROLE, CHEEKY);
-        govToken.grantRole(roles.BURNER_ROLE, CHEEKY);
+        // Transfer governor manager first, then admin (order matters!)
+        AgoraGovernor(payable(governor)).setManager(CHEEKY);
+        AgoraGovernor(payable(governor)).setAdmin(CHEEKY);
 
-        govToken.grantRole(roles.MINTER_ROLE, timelock);
-        govToken.grantRole(roles.BURNER_ROLE, timelock);
-
-        govToken.grantRole(role.DEFAULT_ADMIN_ROLE, CHEEKY);
-        govToken.revokeRole(role.DEFAULT_ADMIN_ROLE, deployer);
-
-        governor.setAdmin(CHEEKY);
-        governor.setManager(CHEEKY);
+        // Transfer token admin to CHEEKY and revoke deployer
+        govToken.grantRole(govToken.DEFAULT_ADMIN_ROLE(), CHEEKY);
+        govToken.revokeRole(govToken.DEFAULT_ADMIN_ROLE(), deployer);
 
         vm.stopBroadcast();
     }
