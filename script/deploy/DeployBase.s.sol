@@ -94,9 +94,9 @@ abstract contract DeployBase is Script {
         // proxyAdmin.transferOwnership(address(timelock));
         assert(address(timelock) == timelockAddress);
 
-        // Govenor modules
-        // ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
-        // AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
+        // Deploy module
+        ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
+        AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
 
         // Deploy module
         OptimisticModule optimistic = new OptimisticModule(address(governor));
@@ -104,14 +104,28 @@ abstract contract DeployBase is Script {
 
         // On the first run:
         // Setup proposal types
-        proposalTypesConfigurator.setProposalType(0, 0, 0, "Signal Votes", "Simple Majority", address(optimistic));
+        // proposalTypesConfigurator.setProposalType(0, 0, 0, "Signal Votes", "Simple Majority", address(optimistic));
 
         proposalTypesConfigurator.setProposalType(
-            1, 0, 5_100, "Distribute Splits", "Set splits distribution", address(0)
+            0, 3_300, 5_100, "Requires Quorum", "Admin the DAO, Modify Splits", address(0)
         );
         proposalTypesConfigurator.setProposalType(
-            2, 3_300, 5_100, "Update Splits", "All other split contract calls", address(0)
+            1, 0, 10_000, "No Quoorum", "Distribute Splits", address(0)
         );
+
+        const CHEEKY = 0x32B6d1CCbFB75aa0d52e036488b169597f0fE3d0;
+
+        govToken.grantRole(roles.MINTER_ROLE, CHEEKY);
+        govToken.grantRole(roles.BURNER_ROLE, CHEEKY);
+
+        govToken.grantRole(roles.MINTER_ROLE, timelock);
+        govToken.grantRole(roles.BURNER_ROLE, timelock);
+
+        govToken.grantRole(role.DEFAULT_ADMIN_ROLE, CHEEKY);
+        govToken.revokeRole(role.DEFAULT_ADMIN_ROLE, deployer);
+
+        governor.setAdmin(CHEEKY);
+        governor.setManager(CHEEKY);
 
         vm.stopBroadcast();
     }
