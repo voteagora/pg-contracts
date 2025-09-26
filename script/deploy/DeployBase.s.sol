@@ -97,12 +97,12 @@ abstract contract DeployBase is Script {
         assert(address(timelock) == timelockAddress);
 
         // Deploy module
-        ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
-        AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
+        // ApprovalVotingModule approvalVoting = new ApprovalVotingModule(governor);
+        // AgoraGovernor(payable(governor)).setModuleApproval(address(approvalVoting), true);
 
         // Deploy module
-        OptimisticModule optimistic = new OptimisticModule(address(governor));
-        AgoraGovernor(payable(governor)).setModuleApproval(address(optimistic), true);
+        // OptimisticModule optimistic = new OptimisticModule(address(governor));
+        // AgoraGovernor(payable(governor)).setModuleApproval(address(optimistic), true);
 
         // On the first run:
         // Setup proposal types
@@ -112,7 +112,7 @@ abstract contract DeployBase is Script {
             0, 3_300, 5_100, "Requires Quorum", "Admin the DAO, Modify Splits", address(0)
         );
         proposalTypesConfigurator.setProposalType(
-            1, 0, 10_000, "No Quoorum", "Distribute Splits", address(0)
+            1, 0, 10_000, "No Quorum", "Distribute Splits", address(0)
         );
 
         // Grant token roles
@@ -128,6 +128,12 @@ abstract contract DeployBase is Script {
         // Transfer token admin to CHEEKY and revoke deployer
         govToken.grantRole(govToken.DEFAULT_ADMIN_ROLE(), CHEEKY);
         govToken.revokeRole(govToken.DEFAULT_ADMIN_ROLE(), deployer);
+
+        // Change the admin of the governor proxy to CHEEKY
+        proxyAdmin.changeProxyAdmin(TransparentUpgradeableProxy(payable(governor)), CHEEKY);
+
+        // Transfer proxy admin control to Cheeky.
+        proxyAdmin.transferOwnership(CHEEKY);
 
         vm.stopBroadcast();
     }
