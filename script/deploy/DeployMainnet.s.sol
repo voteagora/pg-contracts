@@ -11,7 +11,4 @@ contract DeployMainnet is DeployBase {
     function run() external {
         setup();
     }
-
-    // Exclude from coverage report
-    function test() public override {}
 }
