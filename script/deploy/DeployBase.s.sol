@@ -116,24 +116,24 @@ abstract contract DeployBase is Script {
         );
 
         // Grant token roles
-        govToken.grantRole(govToken.MINTER_ROLE(), CHEEKY);
-        govToken.grantRole(govToken.BURNER_ROLE(), CHEEKY);
-        govToken.grantRole(govToken.MINTER_ROLE(), address(timelock));
-        govToken.grantRole(govToken.BURNER_ROLE(), address(timelock));
+        // govToken.grantRole(govToken.MINTER_ROLE(), CHEEKY);
+        // govToken.grantRole(govToken.BURNER_ROLE(), CHEEKY);
+        // govToken.grantRole(govToken.MINTER_ROLE(), address(timelock));
+        // govToken.grantRole(govToken.BURNER_ROLE(), address(timelock));
 
         // Transfer governor manager first, then admin (order matters!)
-        AgoraGovernor(payable(governor)).setManager(CHEEKY);
-        AgoraGovernor(payable(governor)).setAdmin(CHEEKY);
+        // AgoraGovernor(payable(governor)).setManager(CHEEKY);
+        // AgoraGovernor(payable(governor)).setAdmin(CHEEKY);
 
         // Transfer token admin to CHEEKY and revoke deployer
-        govToken.grantRole(govToken.DEFAULT_ADMIN_ROLE(), CHEEKY);
-        govToken.revokeRole(govToken.DEFAULT_ADMIN_ROLE(), deployer);
+        // govToken.grantRole(govToken.DEFAULT_ADMIN_ROLE(), CHEEKY);
+        // govToken.revokeRole(govToken.DEFAULT_ADMIN_ROLE(), deployer);
 
         // Change the admin of the governor proxy to CHEEKY
-        proxyAdmin.changeProxyAdmin(TransparentUpgradeableProxy(payable(governor)), CHEEKY);
+        // proxyAdmin.changeProxyAdmin(TransparentUpgradeableProxy(payable(governor)), CHEEKY);
 
         // Transfer proxy admin control to Cheeky.
-        proxyAdmin.transferOwnership(CHEEKY);
+        // proxyAdmin.transferOwnership(CHEEKY);
 
         vm.stopBroadcast();
     }
