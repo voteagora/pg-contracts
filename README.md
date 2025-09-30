@@ -14,12 +14,20 @@
 <th>GovToken</th>
 </tr>
 <tr>
+<td>Ethereum Mainnet</td>
+<td><a href="https://etherscan.io/address/0xac233e2adbd97f7f9e57bee0dafc13c224a23e43"><code>0xac233e2adbd97f7f9e57bee0dafc13c224a23e43</code></a></td>
+<td><a href="https://etherscan.io/address/0xaac9059248a06233db16fc9c25426365b7afb481"><code>0xaac9059248a06233db16fc9c25426365b7afb481</code></a></td>
+<td><a href="https://etherscan.io/address/0xbfc07a8c9615fe62979f02cd0d975caf61ed0d63"><code>0xbfc07a8c9615fe62979f02cd0d975caf61ed0d63</code></a></td>
+<td><a href="https://etherscan.io/address/0x42436bb7bea1e1e2de03f1223e2a3e0557f606e3"><code>0x42436bb7bea1e1e2de03f1223e2a3e0557f606e3</code></a></td>
+<td><a href="https://etherscan.io/address/0xdcd85e6e7c2ff3c7b6be2bfb33b2d7c99e481bc6"><code>0xdcd85e6e7c2ff3c7b6be2bfb33b2d7c99e481bc6</code></a></td>
+</tr>
+<tr>
 <td>Ethereum Sepolia (Test)</td>
-<td><code>0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA</code></td>
-<td><code>0xF5B87BD1206d7658C344Fe1CB56D9498B4286A67</code></td>
-<td><code>0xb1155A59A8B2bff8f028d5f22EEB18d2841B821E</code></td>
-<td><code>0x1a5628aF2C02B9513722Cc22FF606724C67Ecb76</code></td>
-<td><code>0xE3D4a55f780C5aD9B3009523CB6a3d900A8FA723</code></td>
+<td><a href="https://sepolia.etherscan.io/address/0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA"><code>0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA</code></a></td>
+<td><a href="https://sepolia.etherscan.io/address/0xF5B87BD1206d7658C344Fe1CB56D9498B4286A67"><code>0xF5B87BD1206d7658C344Fe1CB56D9498B4286A67</code></a></td>
+<td><a href="https://sepolia.etherscan.io/address/0xb1155A59A8B2bff8f028d5f22EEB18d2841B821E"><code>0xb1155A59A8B2bff8f028d5f22EEB18d2841B821E</code></a></td>
+<td><a href="https://sepolia.etherscan.io/address/0x1a5628aF2C02B9513722Cc22FF606724C67Ecb76"><code>0x1a5628aF2C02B9513722Cc22FF606724C67Ecb76</code></a></td>
+<td><a href="https://sepolia.etherscan.io/address/0xE3D4a55f780C5aD9B3009523CB6a3d900A8FA723"><code>0xE3D4a55f780C5aD9B3009523CB6a3d900A8FA723</code></a></td>
 </tr>
 </table>
 
