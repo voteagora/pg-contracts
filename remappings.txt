@@ -17,4 +17,3 @@ openzeppelin-contracts/=lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-
 openzeppelin/=lib/agora-governor/src/
 solady/=lib/agora-governor/lib/solady/src/
 @openzeppelin/contracts-upgradeable-v5/=lib/openzeppelin-contracts-upgradeable/contracts/
-src/lib/=lib/agora-governor/src/lib/
