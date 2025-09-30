@@ -1,10 +1,10 @@
 {
   "main": {
-    "AgoraGovernor.sol": "0x42baa004ff081ba7e3b2b810e7a9b4e0e35e8b01",
-    "TimelockController.sol": "0x0cabe65b0adc1634f56ea66a36abb70f2d4232c5",
-    "ProposalTypesConfigurator.sol": "0xa78db4a8efccd5812e0044496edcc571da3d24c6",
-    "ProxyAdmin.sol": "0x7d70d1bb78e3a7252a52ee9e15ee9ba1f3ee3880",
-    "Membership.sol": "0x95fc87e77977a70b08c76b0a7714069d8ff0ff2b"
+    "AgoraGovernor.sol": "0xac233e2adbd97f7f9e57bee0dafc13c224a23e43",
+    "TimelockController.sol": "0xaac9059248a06233db16fc9c25426365b7afb481",
+    "ProposalTypesConfigurator.sol": "0xbfc07a8c9615fe62979f02cd0d975caf61ed0d63",
+    "ProxyAdmin.sol": "0x42436bb7bea1e1e2de03f1223e2a3e0557f606e3",
+    "GovernanceToken.sol": "0xdcd85e6e7c2ff3c7b6be2bfb33b2d7c99e481bc6"
   },
   "test": {
     "AgoraGovernor.sol": "0x2A6a9a2A3f6f3420e26410CA5868ED1cb241A7bA",
