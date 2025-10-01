@@ -50,12 +50,14 @@ contract Relinquish is Script {
         proxyAdmin = ProxyAdmin(PROXY_ADMIN);
 
         governor.setProposalThreshold(1);
-        
+
         // Grant token roles
         govToken.grantRole(govToken.MINTER_ROLE(), CHEEKY);
         govToken.grantRole(govToken.BURNER_ROLE(), CHEEKY);
         govToken.grantRole(govToken.MINTER_ROLE(), TIMELOCK);
         govToken.grantRole(govToken.BURNER_ROLE(), TIMELOCK);
+        govToken.revokeRole(govToken.MINTER_ROLE(), deployer);
+        govToken.revokeRole(govToken.BURNER_ROLE(), deployer);
 
         // Transfer governor manager first, then admin (order matters!)
         governor.setManager(CHEEKY);
@@ -64,9 +66,6 @@ contract Relinquish is Script {
         // Transfer token admin to CHEEKY and revoke deployer
         govToken.grantRole(govToken.DEFAULT_ADMIN_ROLE(), CHEEKY);
         govToken.revokeRole(govToken.DEFAULT_ADMIN_ROLE(), deployer);
-
-        // Change the admin of the governor proxy to CHEEKY
-        proxyAdmin.changeProxyAdmin(TransparentUpgradeableProxy(payable(GOV)), CHEEKY);
 
         // Transfer proxy admin control to Cheeky.
         proxyAdmin.transferOwnership(CHEEKY);
