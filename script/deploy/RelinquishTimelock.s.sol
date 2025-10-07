@@ -45,17 +45,7 @@ contract RelinquishTimelock is Script {
 
         timelock = TimelockController(payable(TIMELOCK));
 
-        // timelock.grantRole(timelock.CANCELLER_ROLE(), CHEEKY);
-        // timelock.grantRole(timelock.EXECUTOR_ROLE(), CHEEKY);
-        // timelock.grantRole(timelock.PROPOSER_ROLE(), CHEEKY);
-        // timelock.grantRole(timelock.TIMELOCK_ADMIN_ROLE(), CHEEKY);
-        // timelock.grantRole(timelock.DEFAULT_ADMIN_ROLE(), CHEEKY);
-
-        timelock.revokeRole(timelock.CANCELLER_ROLE(), deployer);
-        timelock.revokeRole(timelock.EXECUTOR_ROLE(), deployer);
-        timelock.revokeRole(timelock.PROPOSER_ROLE(), deployer);
         timelock.revokeRole(timelock.TIMELOCK_ADMIN_ROLE(), deployer);
-        // timelock.revokeRole(timelock.DEFAULT_ADMIN_ROLE(), deployer);
 
         vm.stopBroadcast();
     }
