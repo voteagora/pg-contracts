@@ -41,7 +41,7 @@ contract RelinquishTimelock is Script {
 
         vm.startBroadcast();
 
-        // (, address deployer,) = vm.readCallers();
+        (, address deployer,) = vm.readCallers();
 
         timelock = TimelockController(payable(TIMELOCK));
 
@@ -51,10 +51,10 @@ contract RelinquishTimelock is Script {
         timelock.grantRole(timelock.TIMELOCK_ADMIN_ROLE(), CHEEKY);
         // timelock.grantRole(timelock.DEFAULT_ADMIN_ROLE(), CHEEKY);
 
-        // timelock.revokeRole(timelock.CANCELLER_ROLE(), deployer);
-        // timelock.revokeRole(timelock.EXECUTOR_ROLE(), deployer);
-        // timelock.revokeRole(timelock.PROPOSER_ROLE(), deployer);
-        // timelock.revokeRole(timelock.TIMELOCK_ADMIN_ROLE(), deployer);
+        timelock.revokeRole(timelock.CANCELLER_ROLE(), deployer);
+        timelock.revokeRole(timelock.EXECUTOR_ROLE(), deployer);
+        timelock.revokeRole(timelock.PROPOSER_ROLE(), deployer);
+        timelock.revokeRole(timelock.TIMELOCK_ADMIN_ROLE(), deployer);
         // timelock.revokeRole(timelock.DEFAULT_ADMIN_ROLE(), deployer);
 
         vm.stopBroadcast();
